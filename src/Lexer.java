@@ -4,7 +4,7 @@ import java.util.List;
 public class Lexer {
 
 
-    private List<Token> tokens = new ArrayList<>();
+    private final static List<Token> tokens = new ArrayList<>();
     public Lexer(String lexeme){
         System.out.println("Evaluating: (" + lexeme + ").....");
         Tokenize(lexeme);
@@ -14,34 +14,24 @@ public class Lexer {
         return tokens;
     }
 
-    public void Tokenize(String lexeme){
+    public static void Tokenize(String lexeme){
 
         int current = 0;
 
         while(current < lexeme.length()) {
             switch(lexeme.charAt(current)){
-                case '+':
-                    tokens.add(new Token(TokenType.PLUS, "+"));
-                    break;
-                case '-':
-                    tokens.add(new Token(TokenType.MINUS,"-"));
-                    break;
-                case '*':
-                    tokens.add(new Token(TokenType.MULTIPLY,"*"));
-                    break;
-                case '^':
-                    tokens.add(new Token(TokenType.POWER,"^"));
-                    break;
-                case '/':
-                    tokens.add(new Token(TokenType.DIVIDE,"/"));
-                    break;
-                case '(':
-                    tokens.add(new Token(TokenType.PARENTHESIS_OPEN,"("));
-                    break;
-                case ')':
-                    tokens.add(new Token(TokenType.PARENTHESIS_CLOSE,")"));
-                    break;
-                default:
+                case ' ' -> {
+                }
+                case '+' -> tokens.add(new Token(TokenType.PLUS, "+"));
+                case '-' -> tokens.add(new Token(TokenType.MINUS,"-"));
+                case '*' -> tokens.add(new Token(TokenType.MULTIPLY,"*"));
+                case '^' -> tokens.add(new Token(TokenType.POWER,"^"));
+                case '/' -> tokens.add(new Token(TokenType.DIVIDE,"/"));
+                case '(' -> tokens.add(new Token(TokenType.PARENTHESIS_OPEN,"("));
+                case ')' -> tokens.add(new Token(TokenType.PARENTHESIS_CLOSE,")"));
+                case '=' -> tokens.add(new Token(TokenType.EQUAL,"="));
+                default -> {
+                    //Interpreting digits
                     if (Character.isDigit(lexeme.charAt(current))) {
                         StringBuilder number = new StringBuilder();
                         while (current < lexeme.length() && Character.isDigit(lexeme.charAt(current))) {
@@ -51,10 +41,16 @@ public class Lexer {
 
                         tokens.add(new Token(TokenType.NUMBER,number.toString()));
                         continue;
-                    }else{
+                    }
+                    //Interpreting variables
+                    else if (Character.isAlphabetic(lexeme.charAt(current))) {
+                        tokens.add(new Token(TokenType.VARIABLE, String.valueOf(lexeme.charAt(current))));
+                    }
+                    
+                    else {
                         tokens.add(new Token(TokenType.ILLEGAL, ""));
                     }
-                    break;
+                }
             }
             current++;
 
@@ -68,24 +64,24 @@ public class Lexer {
     public Token nextToken(){
 
         //when there is nothing left
-        if(tokens.size()==0)
+        if(tokens.isEmpty())
             return new Token(TokenType.EOF,"");
 
         //Access and remove the last element
-        Token token = tokens.remove(tokens.size()-1);
+        Token token = tokens.remove(0);
         return token;
     }
 
     public Token peekToken(){
 
-        if(tokens.size()==0)
+        if(tokens.isEmpty())
             return new Token(TokenType.EOF,"");
 
         //Access the last element
-        return tokens.get(tokens.size()-1);
+        return tokens.get(0);
     }
 
-    private void displayTokens(List<Token> tokens){
+    private static void displayTokens(List<Token> tokens){
         System.out.println(tokens.toString());
     }
 }

@@ -7,6 +7,8 @@ public enum TokenType {
     NUMBER, // numbers are handled separately
     PARENTHESIS_OPEN,
     PARENTHESIS_CLOSE,
+    VARIABLE,
+    EQUAL,
     EOF,
     ILLEGAL
 }

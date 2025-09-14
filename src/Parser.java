@@ -1,50 +1,67 @@
 
-import java.beans.Expression;
 import java.util.*;
 
 public class Parser {
 
-    private Lexer lexer;
-
-
-    public Parser(Lexer lexer) {
-        this.lexer = lexer;
+    public Parser() {
     }
 
-    public HashMap<TokenType, OperationPriority> precedences = new HashMap<TokenType, OperationPriority>(){
-    {
-            put(TokenType.PLUS, OperationPriority.SUM);
-            put(TokenType.MINUS, OperationPriority.SUM);
-            put(TokenType.MULTIPLY, OperationPriority.PRODUCT);
-            put(TokenType.DIVIDE, OperationPriority.PRODUCT);
-            put(TokenType.POWER, OperationPriority.POWER);
-            put(TokenType.PARENTHESIS_OPEN, OperationPriority.GROUP);
-    }
+    private final Map<TokenType, OperationPriority> precedences = Map.of(
 
-    public Expr ParseExpression(Lexer lexer){
+            TokenType.EQUAL, OperationPriority.LOWEST,
+            TokenType.PLUS, OperationPriority.SUM,
+            TokenType.MINUS, OperationPriority.SUM,
+            TokenType.MULTIPLY, OperationPriority.PRODUCT,
+            TokenType.DIVIDE, OperationPriority.PRODUCT,
+            TokenType.POWER, OperationPriority.POWER,
+            TokenType.PARENTHESIS_OPEN, OperationPriority.GROUP);
 
-        Expression lhs = null;
-        Token currToken = lexer.nextToken();
-        if(currToken.type == TokenType.NUMBER){
-            lhs = new Atom(currToken);
-        }
+    public Expression parseExpression(Lexer lexer, float minPrecedence) {
+        Token curr = lexer.nextToken();
+        Expression lhs;
 
-        
-        while (lexer.peekToken().type != TokenType.EOF) { 
-            //Check if it is an operator
-            if(precedences.containsKey(lexer.peekToken().type)){
+        switch (curr.type) {
+            case NUMBER,VARIABLE -> lhs = new UnaryExpression(curr);
+            case PARENTHESIS_OPEN -> {
+                lhs = parseExpression(lexer, 0.0f); // store the inner expression
+                if (lexer.peekToken().type == TokenType.PARENTHESIS_CLOSE) {
+                    lexer.nextToken(); // consume )
+                } else {
+                    System.err.println("Error: missing closing parenthesis");
+                }
+            }
 
+            default -> {
+                System.out.println("Could find it");
+                return null;
             }
         }
-        
+
+        // parse operators and right-hand sides
+        while (true) {
+            Token next = lexer.peekToken();
+            if (next.type == TokenType.EOF || next.type == TokenType.PARENTHESIS_CLOSE) {
+                break;
+            }
+
+            // must be operator
+            if (!precedences.containsKey(next.type)) {
+                System.err.println("Unexpected token: " + next);
+                break;
+            }
+
+            float opPrec = precedences.get(next.type).getValue();
+            if (opPrec < minPrecedence) {
+                break;
+            }
+
+            Token op = lexer.nextToken(); // consume operator
+
+            // parse RHS with higher precedence
+            Expression rhs = parseExpression(lexer, opPrec + 0.1f);
+
+            lhs = new BinaryExpression(op, new ArrayList<>(List.of(rhs, lhs)));
+        }
+        return lhs;
     }
-
-
-
-
-
-
-};
-    
-    
 }

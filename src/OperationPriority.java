@@ -1,18 +1,18 @@
 public enum OperationPriority {
-    LOWEST(0),
-    SUM(1),        // + or -
-    PRODUCT(2),    // * or /
-    PREFIX(3),     // -X or +X
-    POWER(4),      // ^
-    GROUP(5);      //()
+    LOWEST(0.0f),
+    SUM(1.0f),        // + or -
+    PRODUCT(2.0f),    // * or /
+    PREFIX(3.0f),     // -X or +X
+    POWER(4.0f),      // ^
+    GROUP(5.0f);      //()
 
-    private final int value;
+    private final float value;
 
-    OperationPriority(int value) {
+    OperationPriority(float value) {
         this.value = value;
     }
 
-    public int getValue() {
+    public float getValue() {
         return value;
     }
 }
