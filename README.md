@@ -1,18 +1,26 @@
-## Getting Started
+This is an AST calculator which could take a string of input and compute its result.
 
-Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
+The Program Process
 
-## Folder Structure
+You -> Input -> String -> Lexer -> Tokens -> AST -> Evaluate
 
-The workspace contains two folders by default, where:
+For instance, if you type 
+(1 + 2)^2
+It will output 9
+Below are all the notations that the program can handle
+() -> Parenthesis
+^ -> Power
+* -> Multiplication
+/ -> Division
++ -> Addition
+- -> Subtraction
 
-- `src`: the folder to maintain sources
-- `lib`: the folder to maintain dependencies
+It can also handle Variable declaration
+e.g
 
-Meanwhile, the compiled output files will be generated in the `bin` folder by default.
+Line 1:    a = 5
+Line 2:    a + 10
+Output:    15.0
 
-> If you want to customize the folder structure, open `.vscode/settings.json` and update the related settings there.
-
-## Dependency Management
-
-The `JAVA PROJECTS` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-dependency#manage-dependencies).
+Test folder checks with the desired AST and the resulting AST structured from the program.
+Test folder is found under src folder.
