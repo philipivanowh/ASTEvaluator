@@ -1,3 +1,6 @@
+package ASTEvaluator;
+
+//This enum gives the priority of the operation
 public enum OperationPriority {
     LOWEST(0.0f),
     SUM(1.0f),        // + or -

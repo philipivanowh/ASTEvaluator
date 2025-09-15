@@ -1,23 +1,33 @@
+package ASTEvaluator;
 import java.util.ArrayList;
 import java.util.List;
 
+//This class converts a string into a list of tokens
 public class Lexer {
 
 
     private final static List<Token> tokens = new ArrayList<>();
+
     public Lexer(String lexeme){
         System.out.println("Evaluating: (" + lexeme + ").....");
         Tokenize(lexeme);
     }
 
+    /*
+     * Getter method for the list of tokens
+     */
     public List<Token> getTokens(){
         return tokens;
     }
 
+    /*
+     * Main method to convert string into a list of tokens
+     */
     public static void Tokenize(String lexeme){
 
         int current = 0;
 
+        //It iterates over letter by letter and perform the conversion
         while(current < lexeme.length()) {
             switch(lexeme.charAt(current)){
                 case ' ' -> {
@@ -61,6 +71,7 @@ public class Lexer {
     displayTokens(tokens);
 }
 
+    //Consume the next token and gives it
     public Token nextToken(){
 
         //when there is nothing left
@@ -72,6 +83,7 @@ public class Lexer {
         return token;
     }
 
+    //No-consumtion of token and gives it
     public Token peekToken(){
 
         if(tokens.isEmpty())
@@ -81,6 +93,7 @@ public class Lexer {
         return tokens.get(0);
     }
 
+    //Display the list tokens
     private static void displayTokens(List<Token> tokens){
         System.out.println(tokens.toString());
     }

@@ -1,12 +1,12 @@
+package ASTEvaluator;
 
 import java.util.*;
 
+//Organize tokens into an Abstract Syntax Tree Data Structurr
 public class Parser {
 
-    public Parser() {
-    }
-
-    private final Map<TokenType, OperationPriority> precedences = Map.of(
+    //Mapping the priority of the operator tokens
+    private static final Map<TokenType, OperationPriority> precedences = Map.of(
 
             TokenType.EQUAL, OperationPriority.LOWEST,
             TokenType.PLUS, OperationPriority.SUM,
@@ -16,10 +16,12 @@ public class Parser {
             TokenType.POWER, OperationPriority.POWER,
             TokenType.PARENTHESIS_OPEN, OperationPriority.GROUP);
 
-    public Expression parseExpression(Lexer lexer, float minPrecedence) {
+    //Main metheod used to recursivly construct an expression based on the Tokens
+    public static Expression parseExpression(Lexer lexer, float minPrecedence) {
         Token curr = lexer.nextToken();
         Expression lhs;
 
+        //Handles the left hand side
         switch (curr.type) {
             case NUMBER,VARIABLE -> lhs = new UnaryExpression(curr);
             case PARENTHESIS_OPEN -> {

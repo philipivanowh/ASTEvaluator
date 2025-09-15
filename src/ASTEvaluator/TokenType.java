@@ -1,3 +1,5 @@
+package ASTEvaluator;
+//This enum represents the types of tokens
 public enum TokenType {
     PLUS,
     MINUS,

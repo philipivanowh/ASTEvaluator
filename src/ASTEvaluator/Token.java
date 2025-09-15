@@ -1,3 +1,5 @@
+package ASTEvaluator;
+//This class represents a Token which contains a token type and value
 public class Token
 {
     public TokenType type;

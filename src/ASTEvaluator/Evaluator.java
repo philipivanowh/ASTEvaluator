@@ -1,8 +1,13 @@
+package ASTEvaluator;
 import java.util.HashMap;
 
+/*
+ * This class takes  evaluates an expression recursively to output the final result
+ */
 public class Evaluator {
     
 
+    //Evaluate the operation based on the given expression and variables
     public static float evaluate(Expression expression, HashMap<String, Float> variables){
         //This expression is an atom expression
         if(expression instanceof UnaryExpression atom)
@@ -14,19 +19,21 @@ public class Evaluator {
                     return variables.get(atom.getValue());
                 }
                 case TokenType.NUMBER -> {
-                    return Float.valueOf(atom.getValue());
+                    return Float.parseFloat(atom.getValue());
                 }
                 default -> System.err.println("Not a compatible atom");
                     
             }
             
         }
+        //This expression is an Binary Expression
         if(expression instanceof BinaryExpression operation)
         {
             float lhs = evaluate(operation.getOperands().get(0),variables);
             
             float rhs = evaluate(operation.getOperands().get(1),variables);
 
+            //Compute based on the corresponding operator
             switch (operation.getOperator().type){
                 case TokenType.PLUS -> {
                     return lhs + rhs;

@@ -1,5 +1,10 @@
+package ASTEvaluator;
 import java.util.List;
 // Base class
+//This class behave as a node for the Abstract Syntax Tree
+//There are two node types
+// - UnaryExpression -> Contains only a number value
+// -BinaryExpression  -> Contains an operator and one left expression and one right expression
 public class Expression {
 
     public Variable is_assign(){
@@ -50,10 +55,16 @@ class UnaryExpression extends Expression {
         this.atom = atom;
     }
 
+    /*
+     * Getter method for token type
+     */
     public TokenType getType(){
         return atom.type;
     }
 
+    /*
+     * Getter method for token value
+     */
     public String getValue(){
             return atom.value;
     }
